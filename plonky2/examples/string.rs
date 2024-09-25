@@ -69,7 +69,7 @@ fn main() -> Result<()> {
     let contains_flag_target = builder.select(contains_flag, one, zero);
     
     // Public output: whether string1 contains string2.
-    builder.register_public_intput(contains_flag_target);
+    builder.register_public_input(contains_flag_target);
 
     // Set witness values for the string1 and string2 targets.
     let mut pw = PartialWitness::new();
