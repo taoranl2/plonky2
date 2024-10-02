@@ -20,6 +20,7 @@ use plonky2::util::serialization::{
 };
 use plonky2::{get_generator_tag_impl, impl_generator_serializer, read_generator_impl};
 use plonky2_field::extension::Extendable;
+use std::fmt::Debug;
 
 /// A generator used by the prover to calculate the square root (`x`) of a given value
 /// (`x_squared`), outside of the circuit, in order to supply it as an additional public input.
@@ -100,7 +101,9 @@ fn main() -> Result<()> {
     type C = PoseidonGoldilocksConfig;
     type F = <C as GenericConfig<D>>::F;
 
-    let config = CircuitConfig::standard_recursion_config();
+    let mut config = CircuitConfig::standard_recursion_config();
+    config.zero_knowledge = true;  // Enable zero-knowledge mode
+
 
     let mut builder = CircuitBuilder::<F, D>::new(config);
 
@@ -152,5 +155,14 @@ fn main() -> Result<()> {
         assert_eq!(data, data_from_bytes);
     }
 
-    data.verify(proof)
+    data.verify(proof)?;
+    print_common_data(&data.common);
+
+    Ok(())
+
+}
+
+
+fn print_common_data<F: Debug + RichField + Extendable<D>, const D: usize>(common_data: &CommonCircuitData<F, D>) {
+    println!("{:?}", common_data);
 }

@@ -4,6 +4,7 @@ use plonky2::iop::witness::{PartialWitness, WitnessWrite};
 use plonky2::plonk::circuit_builder::CircuitBuilder;
 use plonky2::plonk::circuit_data::CircuitConfig;
 use plonky2::plonk::config::{GenericConfig, PoseidonGoldilocksConfig};
+use plonky2::plonk::circuit_data::CommonCircuitData;
 
 /// An example of using Plonky2 to prove a statement of the form
 /// "I know n * (n + 1) * ... * (n + 99)".
@@ -39,5 +40,13 @@ fn main() -> Result<()> {
         proof.public_inputs[0], proof.public_inputs[1]
     );
 
-    data.verify(proof)
+    data.verify(proof)?;
+    // Access and print circuit statistics
+    let common_data: &CommonCircuitData<F, D> = &data.common;
+    println!("Number of gates: {}", common_data.gates.len()); // Number of gates in the circuit
+    println!("Number of wires: {}", common_data.config.num_wires); // Number of wires in the circuit
+    println!("Number of public inputs: {}", common_data.num_public_inputs); // Number of public inputs
+
+    Ok(())
+    
 }

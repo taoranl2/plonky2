@@ -7,6 +7,10 @@ use plonky2::plonk::config::GenericConfig;
 // use std::collections::HashSet;
 use plonky2::plonk::config::PoseidonGoldilocksConfig;
 use bloom::{BloomFilter, ASMS};
+use plonky2::plonk::circuit_data::CommonCircuitData;
+use plonky2::hash::hash_types::RichField;
+use plonky2_field::extension::Extendable;
+use std::fmt::Debug;
 
 // Function to convert a string to field elements
 fn string_to_field_elements<F: Field>(s: &str) -> Vec<F> {
@@ -94,5 +98,14 @@ fn main() -> Result<()> {
         );
     }
 
-    data.verify(proof)
+    data.verify(proof)?;
+
+    // Access and print circuit statistics
+    print_common_data(&data.common);
+
+    Ok(())
+}
+
+fn print_common_data<F: Debug + RichField + Extendable<D>, const D: usize>(common_data: &CommonCircuitData<F, D>) {
+    println!("{:?}", common_data);
 }
