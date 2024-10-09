@@ -155,14 +155,14 @@ fn main() -> Result<()> {
         assert_eq!(data, data_from_bytes);
     }
 
-    data.verify(proof)?;
-    print_common_data(&data.common);
+    data.verify(proof)
+    // print_common_data(&data.common);
 
-    Ok(())
+    // Ok(())
 
 }
 
 
-fn print_common_data<F: Debug + RichField + Extendable<D>, const D: usize>(common_data: &CommonCircuitData<F, D>) {
-    println!("{:?}", common_data);
-}
+// fn print_common_data<F: Debug + RichField + Extendable<D>, const D: usize>(common_data: &CommonCircuitData<F, D>) {
+//     println!("{:?}", common_data);
+// }

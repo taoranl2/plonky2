@@ -49,7 +49,8 @@ fn main() -> Result<()> {
         bloom.insert(&substring);
     }
 
-    let config = CircuitConfig::standard_recursion_config();
+    let mut config = CircuitConfig::standard_recursion_config();
+    config.zero_knowledge = true;  // Enable zero-knowledge mode
     let mut builder = CircuitBuilder::<F, D>::new(config);
 
     // Iterate through list2 to check membership in Bloom filter
