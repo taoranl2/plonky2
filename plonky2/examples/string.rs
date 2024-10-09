@@ -9,6 +9,7 @@ use plonky2::hash::hash_types::RichField;
 use plonky2_field::extension::Extendable;
 use std::fmt::Debug;
 use bincode; 
+use std::time::Instant;
 
 /// Convert string into vector of field elements (e.g., based on ASCII values).
 fn string_to_field_elements<F: Field>(s: &str) -> Vec<F> {
@@ -89,12 +90,19 @@ fn main() -> Result<()> {
             pw.set_target(*target, value)?;
         }
 
+        let start_time = Instant::now(); 
         let data = builder.build::<C>();
+        let build_duration = start_time.elapsed();
+        let start_time = Instant::now(); 
         let proof = data.prove(pw)?;
+        let prove_duration = start_time.elapsed();
         let serialized_proof = bincode::serialize(&proof).expect("Failed to serialize proof");
         let proof_size = serialized_proof.len();
 
         println!("Proof size for string length {}: {} bytes", length, proof_size);
+        println!("Build duration: {:?}", build_duration);
+        println!("Prove duration: {:?}", prove_duration);
+
 
         // Output result: whether string1 contains string2.
         // let result = proof.public_inputs.last().unwrap();
